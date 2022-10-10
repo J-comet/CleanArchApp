@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="hs.project.clonecleanarchapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".presentation.App"
@@ -17,6 +17,9 @@
         android:theme="@style/Theme.CloneCleanArchApp"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.register.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.login.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.CloneCleanArchApp.NoActionBar">
@@ -29,9 +32,8 @@
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="false"
-            android:label="@string/app_name" />
-
-
+            android:label="@string/app_name"
+            android:theme="@style/Theme.CloneCleanArchApp.NoActionBar" />
     </application>
 
 </manifest>

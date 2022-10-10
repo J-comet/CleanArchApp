@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -20,6 +21,7 @@ import hs.project.clonecleanarchapp.presentation.common.extension.isEmail
 import hs.project.clonecleanarchapp.presentation.common.extension.showGenericAlertDialog
 import hs.project.clonecleanarchapp.presentation.common.extension.showToast
 import hs.project.clonecleanarchapp.presentation.main.MainActivity
+import hs.project.clonecleanarchapp.presentation.register.RegisterActivity
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -36,11 +38,18 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var pref: SharedPrefs
 
+    private val openRegisterActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            goToMainActivity()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         login()
         observe()
+        goToRegisterActivity()
     }
 
     private fun observe() {
@@ -61,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleLoading(isLoading: Boolean) {
         binding.btnLogin.isEnabled = !isLoading
+        binding.btnRegister.isEnabled = !isLoading
         binding.progressHorizontal.isIndeterminate = isLoading
         if (!isLoading){
             binding.progressHorizontal.progress = 0
@@ -74,6 +84,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleErrorLogin(rawResponse: WrappedResponse<LoginResponse>) {
         showGenericAlertDialog(rawResponse.message)
+    }
+
+    private fun goToRegisterActivity() {
+        binding.btnRegister.setOnClickListener {
+            openRegisterActivity.launch(Intent(this@LoginActivity, RegisterActivity::class.java))
+        }
     }
 
     private fun goToMainActivity() {

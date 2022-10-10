@@ -1,5 +1,6 @@
 package hs.project.clonecleanarchapp.presentation.main
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -9,13 +10,21 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import dagger.hilt.android.AndroidEntryPoint
 import hs.project.clonecleanarchapp.R
 import hs.project.clonecleanarchapp.databinding.ActivityMainBinding
+import hs.project.clonecleanarchapp.infra.SharedPrefs
+import hs.project.clonecleanarchapp.presentation.login.LoginActivity
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    @Inject
+    lateinit var pref: SharedPrefs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +42,22 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        chkIsLoggedIn()
+    }
+
+    private fun chkIsLoggedIn(){
+        if (pref.getToken().isEmpty()) {
+            goToLoginActivity()
+        }
+    }
+
+    private fun goToLoginActivity() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
