@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.5.0"
+    ext.kotlin_version = '1.6.21'
 
     // http
     ext.retrofit_version = "2.9.0"
@@ -11,7 +11,7 @@ buildscript {
     ext.coroutine_version = "1.4.1"
 
     // dagger hilt
-    ext.dagger_hilt_version = "2.37"
+    ext.dagger_hilt_version = '2.40.1'
     ext.dagger_hilt_viewmodel_version = "1.0.0-alpha03"
 
     // activiy ktx
@@ -24,7 +24,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.2.1"
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_hilt_version"
 

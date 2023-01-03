@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import hs.project.clonecleanarchapp.R
 import hs.project.clonecleanarchapp.data.common.utils.WrappedResponse
@@ -22,8 +23,10 @@ import hs.project.clonecleanarchapp.presentation.common.extension.showGenericAle
 import hs.project.clonecleanarchapp.presentation.common.extension.showToast
 import hs.project.clonecleanarchapp.presentation.main.MainActivity
 import hs.project.clonecleanarchapp.presentation.register.RegisterActivity
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,9 +56,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observe() {
-        vm.state.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { state -> handleState(state) }
-            .launchIn(lifecycleScope)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.state.collect {
+                    handleState(it)
+                }
+            }
+        }
+//        vm.state.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+//            .onEach { state -> handleState(state) }
+//            .launchIn(lifecycleScope)
     }
 
     private fun handleState(state: LoginActivityState) {
